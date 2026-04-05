@@ -20,52 +20,64 @@ function RegisterPage() {
     signup(values);
   });
   return (
-    <div className="bg-zinc-800 max-w-md p-10 rounded-md">
-      {registerErrors.map((error, i) => (
-        <div className="bg-red-500 p-2 text-white" key={i}>
-          {error}
+  <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center px-4">
+    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+
+      <h2 className="text-3xl font-bold text-center text-indigo-900 mb-2">
+        Crear Cuenta
+      </h2>
+      <p className="text-center text-gray-500 mb-6 text-sm">
+        Completa el formulario para registrarte
+      </p>
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-1">Usuario</label>
+          <input
+            type="text"
+            {...register("username")}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="Tu nombre de usuario"
+          />
         </div>
-      ))}
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          {...register("username", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Username"
-        />
-        {errors.username && (
-          <p className="text-red-500">Username is required</p>
-        )}
-        <input
-          type="email"
-          {...register("email", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Email"
-        />
-        {errors.email && <p className="text-red-500">Email is required</p>}
-        <input
-          type="password"
-          {...register("password", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Password"
-        />
-        {errors.password && (
-          <p className="text-red-500">Password is required</p>
-        )}
+
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-1">Correo</label>
+          <input
+            type="email"
+            {...register("email")}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="tucorreo@email.com"
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-gray-700 font-medium mb-1">Contraseña</label>
+          <input
+            type="password"
+            {...register("password")}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="••••••••"
+          />
+        </div>
+
         <button
-          className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-green-700 active:scale-95 transition"
           type="submit"
+          className="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-2 rounded-lg transition duration-200 shadow-md"
         >
-          Register
+          Registrarse
         </button>
       </form>
-      <p className="flex gap-x-2 justify-between">
-        Already have an account?{" "}
-        <Link to="/login" className="text-sky-500">
-          Sign in
-        </Link>
+
+      <p className="text-center text-gray-500 text-sm mt-4">
+        ¿Ya tienes cuenta?{" "}
+        <a href="/login" className="text-indigo-600 hover:underline font-medium">
+          Inicia sesión
+        </a>
       </p>
     </div>
-  );
+  </div>
+);
+
 }
 export default RegisterPage;

@@ -1,15 +1,13 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
-
 import Cookies from "js-cookie";
-import axios from "axios";
 
 export const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAth must be used within an AuthProvider");
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -20,28 +18,25 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const signup = async (user) => {
+  const signup = async (userData) => {
     try {
-      const res = await registerRequest(user);
+      const res = await registerRequest(userData);
       console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
+      localStorage.setItem("user", JSON.stringify(res.data));
     } catch (error) {
       setErrors(error.response.data);
     }
   };
 
-  const logout = () => {
-    Cookies.remove("token");
-    setIsAuthenticated(false);
-    setUser(null);
-  };
-  const signin = async (user) => {
+  const signin = async (userData) => {
     try {
-      const res = await loginRequest(user);
+      const res = await loginRequest(userData);
       console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
+      localStorage.setItem("user", JSON.stringify(res.data));
     } catch (error) {
       console.log(error);
       if (Array.isArray(error.response.data)) {
@@ -50,6 +45,14 @@ export const AuthProvider = ({ children }) => {
       setErrors([error.response.data.message]);
     }
   };
+
+  const logout = () => {
+    Cookies.remove("token");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -61,13 +64,23 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
+      const savedUser = localStorage.getItem("user");
       const cookies = Cookies.get();
-      if (!cookies.token) {
+
+      if (!cookies.token && !savedUser) {
         setIsAuthenticated(false);
         setLoading(false);
         setUser(null);
         return;
       }
+
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+        setIsAuthenticated(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         const res = await verifyTokenRequest(cookies.token);
         if (!res.data) {
@@ -75,11 +88,9 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           return;
         }
-
         setIsAuthenticated(true);
         setUser(res.data);
         setLoading(false);
-        return;
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
@@ -105,3 +116,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+

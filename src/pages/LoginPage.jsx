@@ -5,8 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 function LoginPage() {
   const {
-    register,
-    handleSubmit,
+    register,   handleSubmit,
     formState: { errors },
   } = useForm();
   const { signin, isAuthenticated, errors: signinErrors } = useAuth();
@@ -19,47 +18,56 @@ function LoginPage() {
   const onSubmit = handleSubmit(async (values) => {
     signin(values);
   });
-  return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-zinc-800 max-w-md p-10 rounded-md m-2">
-        <h1 className="text-2xl font-bold">Login</h1>
-        {signinErrors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white m-2" key={i}>
-            {error}
-          </div>
-        ))}
-        <form onSubmit={onSubmit}>
-          <input
-            type="email"
-            {...register("email", { required: true })}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-            placeholder="Email"
-          />
-          {errors.email && <p className="text-red-500">Email is required</p>}
-          <input
-            type="password"
-            {...register("password", { required: true })}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-            placeholder="Password"
-          />
-          {errors.password && (
-            <p className="text-red-500">Password is required</p>
-          )}
-          <button
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            type="submit"
-          >
-            Login
-          </button>
-        </form>
-        <p className="flex gap-x-2 justify-between">
-          Don`t have an account?{" "}
-          <Link to="/register" className="text-sky-500">
-            Sign up
-          </Link>
+    return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        
+        <h2 className="text-3xl font-bold text-center text-blue-900 mb-2">
+            Bienvenido
+        </h2>
+        <p className="text-center text-gray-500 mb-6 text-sm">
+            Ingresa tus credenciales para continuar
         </p>
-      </div>
+
+        <form onSubmit={onSubmit}>
+            <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-1">Correo</label>
+            <input
+                type="email"
+                {...register("email")}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                placeholder="tucorreo@email.com"
+            />
+            </div>
+
+            <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-1">Contraseña</label>
+            <input
+                type="password"
+                {...register("password")}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                placeholder="••••••••"
+            />
+            </div>
+
+            <button
+            type="submit"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded-lg transition duration-200 shadow-md"
+            >
+            Iniciar Sesión
+            </button>
+        </form>
+
+        <p className="text-center text-gray-500 text-sm mt-4">
+            ¿No tienes cuenta?{" "}
+            <a href="/register" className="text-blue-600 hover:underline font-medium">
+            Regístrate
+            </a>
+        </p>
+        </div>
     </div>
-  );
+    );
+ 
+
 }
 export default LoginPage;
